@@ -4,65 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>上班跳錢機 - 薪水小偷計算器</title>
+    <!-- Tailwind CSS (Keep CDN for simplicity in this setup, usually handled by PostCSS in prod) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
     
-    <!-- Error Handling Script -->
-    <script>
-      // Global error handler
-      window.onerror = function(msg, url, line, col, error) {
-        showError(`Error: ${msg}\nLocation: ${url}:${line}:${col}\n${error ? error.stack : ''}`);
-        return false;
-      };
-      
-      window.addEventListener('unhandledrejection', function(event) {
-        showError(`Unhandled Rejection: ${event.reason}`);
-      });
-
-      function showError(message) {
-        const errorDisplay = document.getElementById('error-display');
-        const errorMessage = document.getElementById('error-message');
-        const loader = document.getElementById('loader');
-        
-        console.error("Critical Error:", message);
-
-        if (errorDisplay && errorMessage) {
-            errorDisplay.style.display = 'flex';
-            errorMessage.textContent = message;
-            if (loader) loader.style.display = 'none';
-        }
-      }
-
-      // Timeout detection: If app doesn't load in 3 seconds, warn the user
-      setTimeout(() => {
-        const loader = document.getElementById('loader');
-        // Check if loader is still in the DOM and visible
-        if (loader && document.body.contains(loader) && loader.style.display !== 'none') {
-            const warningDiv = document.createElement('div');
-            warningDiv.id = 'loader-warning';
-            warningDiv.style.color = '#ef4444'; // red-500
-            warningDiv.style.marginTop = '15px';
-            warningDiv.style.fontSize = '0.9rem';
-            warningDiv.style.fontWeight = 'bold';
-            warningDiv.style.padding = '10px';
-            warningDiv.style.background = 'rgba(255,255,255,0.8)';
-            warningDiv.style.borderRadius = '8px';
-            warningDiv.innerHTML = '⚠️ 系統載入時間過長...<br>若持續卡住，請嘗試重新整理 (F5)';
-            
-            // Only append if not already there
-            const contentContainer = loader.firstElementChild;
-            if (contentContainer && !document.getElementById('loader-warning')) {
-                contentContainer.appendChild(warningDiv);
-            }
-        }
-      }, 3000);
-    </script>
-
     <style>
         body {
             font-family: 'Noto Sans TC', sans-serif;
             background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
         /* Custom Animations */
@@ -162,34 +115,26 @@
 </head>
 <body>
     <div id="root">
-        <div id="loader" style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #f3f4f6; z-index: 9999;">
-            <div style="text-align: center; color: #666;">
-                <div class="loader-ring" style="margin-bottom: 20px;">
-                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
-                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
-                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
-                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
-                </div>
-                <div style="font-family: 'Noto Sans TC';">系統啟動中...</div>
+        <!-- Loader stays in HTML until React mounts and replaces it -->
+        <div id="loader" style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f3f4f6; z-index: 9999;">
+            <div class="loader-ring" style="margin-bottom: 20px;">
+                <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
+                <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
+                <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
+                <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
             </div>
+            <div style="font-family: 'Noto Sans TC'; color: #666; font-weight: bold;">
+                薪水計算核心啟動中...
+            </div>
+            <!-- Backup warning if JS fails completely -->
+            <noscript>
+                <div style="color: red; margin-top: 20px;">
+                    請開啟 JavaScript 以使用此應用程式
+                </div>
+            </noscript>
         </div>
     </div>
     
-    <!-- Error Display UI -->
-    <div id="error-display" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fee2e2; z-index: 10000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: left;">
-        <div style="max-width: 600px; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);">
-            <h2 style="color: #991b1b; margin-bottom: 10px; font-weight: bold; font-size: 1.5rem;">⚠️ 啟動失敗</h2>
-            <p style="color: #7f1d1d; margin-bottom: 20px;">應用程式無法載入，請查看下方錯誤訊息：</p>
-            <pre id="error-message" style="background: #fef2f2; padding: 15px; border-radius: 8px; overflow-x: auto; color: #dc2626; font-size: 0.875rem; border: 1px solid #fecaca; white-space: pre-wrap; word-break: break-all; max-height: 300px; overflow-y: auto;"></pre>
-            <p style="margin-top: 20px; font-size: 0.875rem; color: #666; border-top: 1px solid #eee; padding-top: 10px;">
-                <strong>故障排除建議：</strong><br>
-                1. 請嘗試清除瀏覽器快取並重新整理。<br>
-                2. 若您是開發者，請檢查 Console 是否有 JavaScript 錯誤。<br>
-            </p>
-            <button onclick="window.location.reload()" style="margin-top: 15px; padding: 8px 16px; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer;">重新整理</button>
-        </div>
-    </div>
-
     <script type="module" src="./index.tsx"></script>
 </body>
 </html>
