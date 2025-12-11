@@ -44,7 +44,7 @@ export const JOB_SCRIPTS: Record<JobType, string[]> = {
   ],
   admin: [
     "哈囉",
-    "老闆在問那個報銷單的事",
+    "老闆在問那個報銷單的事!",
     "會計說金額對不上",
     "還有下週活動的便當沒訂？",
     "老闆臉色很難看",
