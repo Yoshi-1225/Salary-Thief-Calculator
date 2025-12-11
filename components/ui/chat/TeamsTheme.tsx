@@ -1,17 +1,8 @@
 import React from 'react';
 import { Phone, Video, X, Send, Bold, Paperclip, Smile } from 'lucide-react';
-import { ChatMessage } from '../../../types';
+import { ThemeProps } from './types';
 
-interface ThemeProps {
-  messages: ChatMessage[];
-  colleagueName: string;
-  timeString: string;
-  initial: string;
-  firstName: string;
-  scrollRef: React.RefObject<HTMLDivElement | null>;
-}
-
-const TeamsTheme: React.FC<ThemeProps> = ({ 
+export const TeamsTheme: React.FC<ThemeProps> = ({ 
   messages, colleagueName, timeString, initial, firstName, scrollRef 
 }) => {
   return (
@@ -66,5 +57,3 @@ const TeamsTheme: React.FC<ThemeProps> = ({
     </div>
   );
 };
-
-export default TeamsTheme;

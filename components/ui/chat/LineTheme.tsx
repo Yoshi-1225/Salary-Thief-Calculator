@@ -1,17 +1,8 @@
 import React from 'react';
-import { Phone, Search, MoreHorizontal, Smile, Send } from 'lucide-react';
-import { ChatMessage } from '../../../types';
+import { Phone, Send, Smile, Search, MoreHorizontal } from 'lucide-react';
+import { ThemeProps } from './types';
 
-interface ThemeProps {
-  messages: ChatMessage[];
-  colleagueName: string;
-  timeString: string;
-  initial: string;
-  firstName: string;
-  scrollRef: React.RefObject<HTMLDivElement | null>;
-}
-
-const LineTheme: React.FC<ThemeProps> = ({ 
+export const LineTheme: React.FC<ThemeProps> = ({ 
   messages, colleagueName, timeString, firstName, scrollRef 
 }) => {
   return (
@@ -68,5 +59,3 @@ const LineTheme: React.FC<ThemeProps> = ({
     </div>
   );
 };
-
-export default LineTheme;
