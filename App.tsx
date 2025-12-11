@@ -4,9 +4,10 @@ import Dashboard from './components/Dashboard';
 import FakeDesktop from './components/overlays/FakeDesktop';
 import FakeUpdateScreen from './components/overlays/FakeUpdateScreen';
 import SummaryModal from './components/SummaryModal';
+import Header from './components/layout/Header';
+import Toast from './components/ui/Toast';
 import { AppStatus } from './types';
 import { useSalaryTimer } from './hooks/useSalaryTimer';
-import { Star } from 'lucide-react';
 
 export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -69,17 +70,7 @@ export default function App() {
       )}
 
       {/* Hero Section */}
-      <header className="w-full header-bg shadow-md relative overflow-hidden group">
-        <div className="relative z-10 max-w-4xl mx-auto px-4 py-12 text-center text-white">
-          <h1 
-            className="text-4xl md:text-6xl font-black mb-2 tracking-tight cursor-pointer hover:text-blue-200 transition-colors select-none drop-shadow-lg"
-            onClick={() => showToast("現在已是網頁應用程式，無需下載！")}
-          >
-            上班跳錢機 💸
-          </h1>
-          <p className="text-xl font-bold opacity-90">每一秒鐘，都是金錢的聲音</p>
-        </div>
-      </header>
+      <Header onTitleClick={() => showToast("現在已是網頁應用程式，無需下載！")} />
 
       <main className="w-full max-w-md md:max-w-2xl px-4 py-6 flex-grow flex flex-col gap-6 relative z-10">
         {state.status === AppStatus.IDLE ? (
@@ -94,10 +85,7 @@ export default function App() {
       </main>
 
       {/* Toast */}
-      <div className={`fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-2xl transition-opacity pointer-events-none z-[200] flex items-center gap-2 ${toastMessage ? 'opacity-100' : 'opacity-0'}`}>
-        <Star className="text-yellow-400 w-5 h-5" />
-        <span>{toastMessage}</span>
-      </div>
+      <Toast message={toastMessage} />
     </div>
   );
 }
