@@ -1,0 +1,5 @@
+{
+  "name": "上班跳錢機 (Salary Thief Calculator)",
+  "description": "A React-based calculator that visualizes your earnings in real-time, featuring 'Poop Mode' and 'Fake Update Mode' to help you slack off efficiently.",
+  "requestFramePermissions": []
+}
