@@ -10,29 +10,48 @@
     
     <!-- Error Handling Script -->
     <script>
+      // Global error handler
       window.onerror = function(msg, url, line, col, error) {
-        const errorDisplay = document.getElementById('error-display');
-        const errorMessage = document.getElementById('error-message');
-        const loader = document.getElementById('loader');
-        if (errorDisplay && errorMessage) {
-            errorDisplay.style.display = 'flex';
-            errorMessage.textContent = `Error: ${msg}\nLocation: ${url}:${line}:${col}\n${error ? error.stack : ''}`;
-            // Force hide loader if error occurs
-            if (loader) loader.style.display = 'none';
-        }
-        console.error('Global Error:', error);
+        showError(`Error: ${msg}\nLocation: ${url}:${line}:${col}\n${error ? error.stack : ''}`);
+        return false;
       };
       
       window.addEventListener('unhandledrejection', function(event) {
+        showError(`Unhandled Rejection: ${event.reason}`);
+      });
+
+      function showError(message) {
         const errorDisplay = document.getElementById('error-display');
         const errorMessage = document.getElementById('error-message');
         const loader = document.getElementById('loader');
+        
+        console.error(message);
+
         if (errorDisplay && errorMessage) {
             errorDisplay.style.display = 'flex';
-            errorMessage.textContent = `Unhandled Rejection: ${event.reason}`;
+            errorMessage.textContent = message;
             if (loader) loader.style.display = 'none';
         }
-      });
+      }
+
+      // Timeout detection: If app doesn't load in 5 seconds, warn the user
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        // Check if loader is still in the DOM and visible
+        if (loader && document.body.contains(loader) && loader.style.display !== 'none') {
+            const warningDiv = document.createElement('div');
+            warningDiv.style.color = '#ef4444'; // red-500
+            warningDiv.style.marginTop = '15px';
+            warningDiv.style.fontSize = '0.9rem';
+            warningDiv.style.fontWeight = 'bold';
+            warningDiv.innerHTML = '⚠️ 系統載入時間過長...<br>若持續卡住，請重新整理或檢查 Console 錯誤';
+            
+            const contentContainer = loader.firstElementChild;
+            if (contentContainer) {
+                contentContainer.appendChild(warningDiv);
+            }
+        }
+      }, 5000);
     </script>
 
     <style>
@@ -127,20 +146,18 @@
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react/": "https://esm.sh/react@18.2.0/",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?deps=react@18.2.0",
-    "react-dom": "https://esm.sh/react-dom@18.2.0?deps=react@18.2.0",
-    "react-dom/": "https://esm.sh/react-dom@18.2.0/",
-    "lucide-react": "https://esm.sh/lucide-react@0.294.0?deps=react@18.2.0",
-    "tone": "https://esm.sh/tone@14.7.77"
+    "react": "https://esm.sh/react@^19.2.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
+    "react/": "https://esm.sh/react@^19.2.1/",
+    "tone": "https://esm.sh/tone@^15.1.22",
+    "lucide-react": "https://esm.sh/lucide-react@^0.559.0"
   }
 }
 </script>
 </head>
 <body>
     <div id="root">
-        <div id="loader" style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
+        <div id="loader" style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #f3f4f6; z-index: 9999;">
             <div style="text-align: center; color: #666;">
                 <div class="loader-ring" style="margin-bottom: 20px;">
                     <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
@@ -154,17 +171,18 @@
     </div>
     
     <!-- Error Display UI -->
-    <div id="error-display" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fee2e2; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: left;">
+    <div id="error-display" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fee2e2; z-index: 10000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: left;">
         <div style="max-width: 600px; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);">
             <h2 style="color: #991b1b; margin-bottom: 10px; font-weight: bold; font-size: 1.5rem;">⚠️ 啟動失敗</h2>
             <p style="color: #7f1d1d; margin-bottom: 20px;">應用程式無法載入，請查看下方錯誤訊息：</p>
-            <pre id="error-message" style="background: #fef2f2; padding: 15px; border-radius: 8px; overflow-x: auto; color: #dc2626; font-size: 0.875rem; border: 1px solid #fecaca; white-space: pre-wrap; word-break: break-all;"></pre>
+            <pre id="error-message" style="background: #fef2f2; padding: 15px; border-radius: 8px; overflow-x: auto; color: #dc2626; font-size: 0.875rem; border: 1px solid #fecaca; white-space: pre-wrap; word-break: break-all; max-height: 300px; overflow-y: auto;"></pre>
             <p style="margin-top: 20px; font-size: 0.875rem; color: #666; border-top: 1px solid #eee; padding-top: 10px;">
                 <strong>故障排除建議：</strong><br>
-                1. 如果您直接開啟 index.html，瀏覽器無法執行 .tsx 檔案，請使用 Vite 等工具進行 Build。<br>
-                2. 檢查網路連線，確認是否能連線至 esm.sh。<br>
-                3. 請確認您的伺服器支援 ESM 模組。
+                1. 請確認已執行 <code>npm install</code> 與 <code>npm run dev</code>。<br>
+                2. 若已部署，請檢查 Build Log 是否有錯誤。<br>
+                3. 請使用支援 ESM 的瀏覽器 (Chrome, Edge, Firefox, Safari)。
             </p>
+            <button onclick="window.location.reload()" style="margin-top: 15px; padding: 8px 16px; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer;">重新整理</button>
         </div>
     </div>
 

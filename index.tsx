@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
+console.log("Starting Salary Thief Calculator...");
+
 try {
   const rootElement = document.getElementById('root');
   if (!rootElement) {
@@ -14,6 +16,7 @@ try {
       <App />
     </React.StrictMode>
   );
+  console.log("React app mounted successfully.");
 } catch (error) {
   console.error("Failed to mount React app:", error);
   // Re-throw to trigger the window.onerror handler in index.html
