@@ -275,4 +275,4 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messenger, jobTitle }) => {
   );
 };
 
-export default ChatWindow;
+export default React.memo(ChatWindow);
