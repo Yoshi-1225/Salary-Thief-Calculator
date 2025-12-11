@@ -1,178 +1,51 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import SetupCard from './components/SetupCard';
 import Dashboard from './components/Dashboard';
 import FakeDesktop from './components/overlays/FakeDesktop';
 import FakeUpdateScreen from './components/overlays/FakeUpdateScreen';
 import SummaryModal from './components/SummaryModal';
-import { AppState, AppStatus, Settings } from './types';
-import { playSound } from './utils/audio';
+import { AppStatus } from './types';
+import { useSalaryTimer } from './hooks/useSalaryTimer';
 import { Star } from 'lucide-react';
 
-const INITIAL_STATE: AppState = {
-  status: AppStatus.IDLE,
-  salaryPerSecond: 0,
-  startTime: 0,
-  sessionTotal: 0,
-  poopTotal: 0,
-  slackTotal: 0,
-  poopStartTime: 0,
-  slackStartTime: 0,
-  totalPoopTime: 0,
-  totalSlackTime: 0,
-  lastFrameTime: 0,
-  isRetroactive: false,
-  retroStartTimeString: "",
-  settings: null
-};
-
 export default function App() {
-  const [state, setState] = useState<AppState>(INITIAL_STATE);
-  const [showSummary, setShowSummary] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const animationFrameRef = useRef<number | null>(null);
+  const [showSummary, setShowSummary] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
+  // Helper to show toast messages
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  const handleStart = (settings: Settings) => {
-    const secondsPerMonth = settings.days * settings.hours * 3600;
-    const salaryPerSecond = settings.salary / secondsPerMonth;
-
-    let startTime = Date.now();
-    let sessionTotal = 0;
-    let isRetroactive = false;
-    let retroStartTimeString = "";
-
-    const now = new Date();
-    const [inputHours, inputMinutes] = settings.startTime.split(':').map(Number);
-    const startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), inputHours, inputMinutes, 0);
-
-    if (startDate < now) {
-      const diffSeconds = (now.getTime() - startDate.getTime()) / 1000;
-      const retroactiveEarnings = diffSeconds * salaryPerSecond;
-      startTime = startDate.getTime();
-      sessionTotal = retroactiveEarnings;
-      isRetroactive = true;
-      retroStartTimeString = settings.startTime;
-      showToast(`補登成功！已幫您計算累積的 NT$${retroactiveEarnings.toFixed(2)}`);
-    }
-
-    setState({
-      ...INITIAL_STATE,
-      status: AppStatus.WORKING,
-      salaryPerSecond,
-      startTime,
-      sessionTotal,
-      isRetroactive,
-      retroStartTimeString,
-      lastFrameTime: performance.now(),
-      settings: settings
-    });
-    
-    playSound('start');
-  };
-
-  const updateMoney = (timestamp: number) => {
-    setState(prevState => {
-      if (prevState.status === AppStatus.IDLE) return prevState;
-
-      const deltaTime = timestamp - prevState.lastFrameTime;
-      const earnedThisFrame = prevState.salaryPerSecond * (deltaTime / 1000);
-
-      return {
-        ...prevState,
-        lastFrameTime: timestamp,
-        sessionTotal: prevState.sessionTotal + earnedThisFrame,
-        poopTotal: prevState.status === AppStatus.POOPING 
-          ? prevState.poopTotal + earnedThisFrame 
-          : prevState.poopTotal,
-        slackTotal: prevState.status === AppStatus.SLACKING 
-          ? prevState.slackTotal + earnedThisFrame 
-          : prevState.slackTotal
-      };
-    });
-
-    animationFrameRef.current = requestAnimationFrame(updateMoney);
-  };
+  // Logic extracted to custom hook
+  const { state, handleStart, handleStop, changeStatus, handleRestart } = useSalaryTimer(showToast);
 
   useEffect(() => {
-    if (state.status !== AppStatus.IDLE && !animationFrameRef.current) {
-      animationFrameRef.current = requestAnimationFrame(updateMoney);
-    }
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-        animationFrameRef.current = null;
-      }
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
     };
-  }, [state.status]);
-
-  const changeStatus = (newStatus: AppStatus) => {
-    // Accumulate time for the previous state before switching
-    setState(prev => {
-      let updates: Partial<AppState> = { status: newStatus };
-      
-      if (prev.status === AppStatus.POOPING) {
-        updates.totalPoopTime = prev.totalPoopTime + (Date.now() - prev.poopStartTime);
-      }
-      if (prev.status === AppStatus.SLACKING) {
-        updates.totalSlackTime = prev.totalSlackTime + (Date.now() - prev.slackStartTime);
-      }
-
-      if (newStatus === AppStatus.POOPING) {
-        updates.poopStartTime = Date.now();
-      } else if (newStatus === AppStatus.SLACKING) {
-        updates.slackStartTime = Date.now();
-      }
-
-      return { ...prev, ...updates };
-    });
     
-    playSound('pop');
-    
-    if (newStatus === AppStatus.WORKING && state.status !== AppStatus.IDLE) {
-      // Returning to work
-      if (state.status === AppStatus.SLACKING) {
-         showToast(`摸魚結束，賺了 NT$${state.slackTotal.toFixed(2)}`);
-      } else {
-         showToast("回到工作崗位");
-      }
-    }
-  };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
-  const handleStop = () => {
-    // Final accumulation
-    setState(prev => {
-        let updates: Partial<AppState> = { status: AppStatus.IDLE };
-        if (prev.status === AppStatus.POOPING) {
-          updates.totalPoopTime = prev.totalPoopTime + (Date.now() - prev.poopStartTime);
-        }
-        if (prev.status === AppStatus.SLACKING) {
-          updates.totalSlackTime = prev.totalSlackTime + (Date.now() - prev.slackStartTime);
-        }
-        return { ...prev, ...updates };
-    });
-
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-    }
-
-    playSound('cash');
+  const onStopClick = () => {
+    handleStop();
     setShowSummary(true);
   };
 
-  const handleRestart = () => {
+  const onRestartClick = () => {
     setShowSummary(false);
-    setState(INITIAL_STATE);
+    handleRestart();
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center text-gray-800 relative">
-      {/* Overlays */}
-      {state.status === AppStatus.POOPING && state.settings && (
+      {/* Overlays - Hidden on mobile */}
+      {!isMobile && state.status === AppStatus.POOPING && state.settings && (
         <FakeDesktop 
           money={state.poopTotal} 
           duration={Date.now() - state.poopStartTime} 
@@ -183,7 +56,7 @@ export default function App() {
         />
       )}
       
-      {state.status === AppStatus.SLACKING && (
+      {!isMobile && state.status === AppStatus.SLACKING && (
         <FakeUpdateScreen 
           percentage={Math.floor(state.slackTotal)} 
           moneyString={state.slackTotal.toFixed(2).replace('.', '')}
@@ -192,7 +65,7 @@ export default function App() {
       )}
 
       {showSummary && (
-        <SummaryModal state={state} onRestart={handleRestart} />
+        <SummaryModal state={state} onRestart={onRestartClick} />
       )}
 
       {/* Hero Section */}
@@ -215,7 +88,7 @@ export default function App() {
           <Dashboard 
             state={state} 
             onStatusChange={changeStatus} 
-            onStop={handleStop} 
+            onStop={onStopClick} 
           />
         )}
       </main>

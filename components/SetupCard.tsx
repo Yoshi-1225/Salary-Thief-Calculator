@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Settings, JobType, OsType, MessengerType } from '../types';
-import { Settings as SettingsIcon, History, PlayCircle, Monitor, MessageSquare, Briefcase } from 'lucide-react';
+import { Settings as SettingsIcon, History, PlayCircle, Monitor, MessageSquare, Briefcase, Info } from 'lucide-react';
 
 interface SetupCardProps {
   onStart: (settings: Settings) => void;
   className?: string;
 }
 
+const SALARY_PRESETS = [30000, 35000, 38000, 40000, 45000, 50000, 60000, 80000];
+
 const SetupCard: React.FC<SetupCardProps> = ({ onStart, className }) => {
   const [salary, setSalary] = useState<string>('');
   const [days, setDays] = useState<number>(22);
   const [hours, setHours] = useState<number>(8);
-  const [startTime, setStartTime] = useState<string>('');
+  
+  // Retroactive Time State
+  const [useRetroactive, setUseRetroactive] = useState(false);
+  const [startTime, setStartTime] = useState<string>('09:00');
   
   // New State
   const [jobTitle, setJobTitle] = useState<JobType>('engineer');
   const [os, setOs] = useState<OsType>('windows');
   const [messenger, setMessenger] = useState<MessengerType>('teams');
 
-  useEffect(() => {
-    resetTime();
-  }, []);
-
-  const resetTime = () => {
+  const setToNow = () => {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, '0');
     const m = String(now.getMinutes()).padStart(2, '0');
@@ -38,7 +39,7 @@ const SetupCard: React.FC<SetupCardProps> = ({ onStart, className }) => {
       salary: parseFloat(salary),
       days,
       hours,
-      startTime,
+      startTime: useRetroactive ? startTime : '',
       jobTitle,
       os,
       messenger
@@ -48,7 +49,7 @@ const SetupCard: React.FC<SetupCardProps> = ({ onStart, className }) => {
   const inputClass = "w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 outline-none bg-white text-gray-900 placeholder-gray-400";
 
   return (
-    <div className={`bg-white rounded-2xl shadow-xl p-6 md:p-8 transform transition-all duration-300 ${className}`}>
+    <div className={`bg-white rounded-2xl shadow-xl p-6 md:p-8 ${className}`}>
       <h2 className="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2 text-gray-800">
         <SettingsIcon className="text-blue-600" />
         設定你的身價
@@ -64,6 +65,18 @@ const SetupCard: React.FC<SetupCardProps> = ({ onStart, className }) => {
             className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-xl font-bold text-center transition-colors bg-white text-gray-900"
             placeholder="例如: 45000"
           />
+          <div className="flex flex-wrap gap-2 mt-3 justify-center">
+            {SALARY_PRESETS.map((amount) => (
+              <button
+                key={amount}
+                onClick={() => setSalary(amount.toString())}
+                type="button"
+                className="px-3 py-1.5 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-blue-100 hover:text-blue-700 rounded-full border border-gray-200 hover:border-blue-200 transition-all active:scale-95"
+              >
+                ${amount.toLocaleString()}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -133,26 +146,46 @@ const SetupCard: React.FC<SetupCardProps> = ({ onStart, className }) => {
           </div>
         </div>
 
-        <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
-          <label className="block text-sm font-bold text-blue-800 mb-2 flex items-center gap-2">
-            <History className="text-lg w-5 h-5" />
-            補登上班時間 (選填)
-          </label>
-          <div className="flex gap-2 items-center">
-            <input
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 outline-none text-center font-mono text-lg bg-white"
-            />
-            <button
-              type="button"
-              onClick={resetTime}
-              className="bg-white px-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-600 hover:bg-gray-50 whitespace-nowrap"
-            >
-              現在
-            </button>
+        <div className={`p-4 rounded-xl border ${useRetroactive ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
+          <div className="flex items-center justify-between mb-2">
+            <label className={`block text-sm font-bold flex items-center gap-2 cursor-pointer select-none ${useRetroactive ? 'text-blue-800' : 'text-gray-500'}`}>
+              <input 
+                type="checkbox" 
+                checked={useRetroactive} 
+                onChange={(e) => setUseRetroactive(e.target.checked)}
+                className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-gray-300"
+              />
+              <span className="flex items-center gap-2">
+                <History className="text-lg w-5 h-5" />
+                補登上班時間
+              </span>
+            </label>
           </div>
+          
+          {useRetroactive && (
+            <div className="mt-4">
+              <div className="flex gap-2 items-stretch h-12">
+                <input
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  className="flex-1 min-w-0 w-full px-3 rounded-lg border border-gray-300 focus:border-blue-500 outline-none text-base bg-white text-gray-900 font-mono"
+                  style={{ colorScheme: 'light' }}
+                />
+                <button
+                  type="button"
+                  onClick={setToNow}
+                  className="px-4 rounded-lg border border-gray-300 bg-white text-sm font-bold text-gray-600 hover:text-blue-600 hover:border-blue-300 transition-all active:scale-95 whitespace-nowrap shadow-sm"
+                >
+                  現在
+                </button>
+              </div>
+              <div className="mt-2 flex items-start gap-2 text-xs text-blue-800 bg-blue-100/50 p-2 rounded-lg">
+                 <Info className="w-4 h-4 mt-0.5 shrink-0 text-blue-600" />
+                 <span>若時間晚於現在（如現在 10:00，填 23:00），將算作「昨天」。</span>
+              </div>
+            </div>
+          )}
         </div>
 
         <button
