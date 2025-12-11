@@ -2,26 +2,19 @@ import React from 'react';
 import { AppState } from '../types';
 import { formatMoney, formatTime } from '../utils/format';
 import { Home } from 'lucide-react';
+import { SUMMARY_COMMENTS } from '../data/constants';
 
 interface SummaryModalProps {
   state: AppState;
   onRestart: () => void;
 }
 
-const COMMENTS = [
-  "老闆的錢真好賺！", 
-  "這就是資本主義的味道。", 
-  "明天繼續來廁所報到。", 
-  "薪水小偷大成功！", 
-  "辛苦了（指腸胃）。"
-];
-
 const SummaryModal: React.FC<SummaryModalProps> = ({ state, onRestart }) => {
   const workEarned = state.sessionTotal - state.poopTotal - state.slackTotal;
   const totalDuration = Date.now() - state.startTime;
   const workTime = totalDuration - state.totalPoopTime - state.totalSlackTime;
   
-  const randomComment = COMMENTS[Math.floor(Math.random() * COMMENTS.length)];
+  const randomComment = SUMMARY_COMMENTS[Math.floor(Math.random() * SUMMARY_COMMENTS.length)];
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">

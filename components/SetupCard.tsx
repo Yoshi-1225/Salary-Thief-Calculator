@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Settings, JobType, OsType, MessengerType } from '../types';
 import { Settings as SettingsIcon, History, PlayCircle, Monitor, MessageSquare, Briefcase, Info } from 'lucide-react';
+import { SALARY_PRESETS } from '../data/constants';
 
 interface SetupCardProps {
   onStart: (settings: Settings) => void;
   className?: string;
 }
-
-const SALARY_PRESETS = [30000, 35000, 38000, 40000, 45000, 50000, 60000, 80000];
 
 const SetupCard: React.FC<SetupCardProps> = ({ onStart, className }) => {
   const [salary, setSalary] = useState<string>('');
