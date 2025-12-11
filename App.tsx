@@ -29,18 +29,7 @@ export default function App() {
   const [state, setState] = useState<AppState>(INITIAL_STATE);
   const [showSummary, setShowSummary] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
   const animationFrameRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -182,8 +171,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center text-gray-800 relative">
-      {/* Overlays - Hidden on mobile */}
-      {!isMobile && state.status === AppStatus.POOPING && state.settings && (
+      {/* Overlays */}
+      {state.status === AppStatus.POOPING && state.settings && (
         <FakeDesktop 
           money={state.poopTotal} 
           duration={Date.now() - state.poopStartTime} 
@@ -194,7 +183,7 @@ export default function App() {
         />
       )}
       
-      {!isMobile && state.status === AppStatus.SLACKING && (
+      {state.status === AppStatus.SLACKING && (
         <FakeUpdateScreen 
           percentage={Math.floor(state.slackTotal)} 
           moneyString={state.slackTotal.toFixed(2).replace('.', '')}

@@ -7,8 +7,6 @@ interface SetupCardProps {
   className?: string;
 }
 
-const SALARY_PRESETS = [30000, 35000, 38000, 40000, 45000, 50000, 60000, 80000];
-
 const SetupCard: React.FC<SetupCardProps> = ({ onStart, className }) => {
   const [salary, setSalary] = useState<string>('');
   const [days, setDays] = useState<number>(22);
@@ -66,18 +64,6 @@ const SetupCard: React.FC<SetupCardProps> = ({ onStart, className }) => {
             className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-xl font-bold text-center transition-colors bg-white text-gray-900"
             placeholder="例如: 45000"
           />
-          <div className="flex flex-wrap gap-2 mt-3 justify-center">
-            {SALARY_PRESETS.map((amount) => (
-              <button
-                key={amount}
-                onClick={() => setSalary(amount.toString())}
-                type="button"
-                className="px-3 py-1.5 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-blue-100 hover:text-blue-700 rounded-full border border-gray-200 hover:border-blue-200 transition-all active:scale-95"
-              >
-                ${amount.toLocaleString()}
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
