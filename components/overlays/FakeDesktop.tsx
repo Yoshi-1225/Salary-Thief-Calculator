@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import ChatWindow from '../ui/ChatWindow.tsx';
-import { formatMoney, formatTimer } from '../../utils/format.ts';
+import ChatWindow from '../ui/ChatWindow';
+import { formatMoney, formatTimer } from '../../utils/format';
 import { Folder, FileSpreadsheet, FileText, Wifi, Volume2, MessageSquare, Mail, Grip } from 'lucide-react';
-import { JobType, OsType, MessengerType } from '../../types.ts';
+import { JobType, OsType, MessengerType } from '../../types';
 
 interface FakeDesktopProps {
   money: number;

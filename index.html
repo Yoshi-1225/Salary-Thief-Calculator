@@ -5,37 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>上班跳錢機 - 薪水小偷計算器</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Add Babel Standalone -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
-    
-    <!-- Error Handling Script -->
-    <script>
-      window.onerror = function(msg, url, line, col, error) {
-        const errorDisplay = document.getElementById('error-display');
-        const errorMessage = document.getElementById('error-message');
-        const loader = document.getElementById('loader');
-        if (errorDisplay && errorMessage) {
-            errorDisplay.style.display = 'flex';
-            errorMessage.textContent = `Error: ${msg}\nLocation: ${url}:${line}:${col}\n${error ? error.stack : ''}`;
-            if (loader) loader.style.display = 'none';
-        }
-        console.error('Global Error:', error);
-      };
-      
-      window.addEventListener('unhandledrejection', function(event) {
-        const errorDisplay = document.getElementById('error-display');
-        const errorMessage = document.getElementById('error-message');
-        const loader = document.getElementById('loader');
-        if (errorDisplay && errorMessage) {
-            errorDisplay.style.display = 'flex';
-            errorMessage.textContent = `Unhandled Rejection: ${event.reason}`;
-            if (loader) loader.style.display = 'none';
-        }
-      });
-    </script>
-
     <style>
         body {
             font-family: 'Noto Sans TC', sans-serif;
@@ -128,48 +99,16 @@
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react/": "https://esm.sh/react@18.2.0/",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?deps=react@18.2.0",
-    "react-dom": "https://esm.sh/react-dom@18.2.0?deps=react@18.2.0",
-    "lucide-react": "https://esm.sh/lucide-react@0.294.0?deps=react@18.2.0",
-    "tone": "https://esm.sh/tone@14.7.77",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.1/"
+    "react/": "https://esm.sh/react@^19.2.1/",
+    "react": "https://esm.sh/react@^19.2.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.559.0",
+    "tone": "https://esm.sh/tone@^15.1.22"
   }
 }
 </script>
 </head>
 <body>
-    <div id="root">
-        <div id="loader" style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
-            <div style="text-align: center; color: #666;">
-                <div class="loader-ring" style="margin-bottom: 20px;">
-                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
-                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
-                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
-                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
-                </div>
-                <div style="font-family: 'Noto Sans TC';">系統啟動中...</div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Error Display UI -->
-    <div id="error-display" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fee2e2; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: left;">
-        <div style="max-width: 600px; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);">
-            <h2 style="color: #991b1b; margin-bottom: 10px; font-weight: bold; font-size: 1.5rem;">⚠️ 啟動失敗</h2>
-            <p style="color: #7f1d1d; margin-bottom: 20px;">應用程式無法載入，請查看下方錯誤訊息：</p>
-            <pre id="error-message" style="background: #fef2f2; padding: 15px; border-radius: 8px; overflow-x: auto; color: #dc2626; font-size: 0.875rem; border: 1px solid #fecaca; white-space: pre-wrap; word-break: break-all;"></pre>
-            <p style="margin-top: 20px; font-size: 0.875rem; color: #666; border-top: 1px solid #eee; padding-top: 10px;">
-                <strong>故障排除建議：</strong><br>
-                1. 檢查您的瀏覽器是否支援 ES Modules。<br>
-                2. 確認所有檔案副檔名引用正確 (.tsx/.ts)。<br>
-                3. 請確認您的伺服器正確提供檔案。
-            </p>
-        </div>
-    </div>
-
-    <!-- Modified script tag for Babel Standalone -->
-    <script type="text/babel" data-type="module" data-presets="react,typescript" src="./index.tsx"></script>
+    <div id="root"></div>
 </body>
 </html>

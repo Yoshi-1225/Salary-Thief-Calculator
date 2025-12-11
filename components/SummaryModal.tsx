@@ -1,6 +1,6 @@
 import React from 'react';
-import { AppState } from '../types.ts';
-import { formatMoney, formatTime } from '../utils/format.ts';
+import { AppState } from '../types';
+import { formatMoney, formatTime } from '../utils/format';
 import { Home } from 'lucide-react';
 
 interface SummaryModalProps {

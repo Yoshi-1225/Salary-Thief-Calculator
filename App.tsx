@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import SetupCard from './components/SetupCard.tsx';
-import Dashboard from './components/Dashboard.tsx';
-import FakeDesktop from './components/overlays/FakeDesktop.tsx';
-import FakeUpdateScreen from './components/overlays/FakeUpdateScreen.tsx';
-import SummaryModal from './components/SummaryModal.tsx';
-import { AppState, AppStatus, Settings } from './types.ts';
-import { playSound } from './utils/audio.ts';
+import SetupCard from './components/SetupCard';
+import Dashboard from './components/Dashboard';
+import FakeDesktop from './components/overlays/FakeDesktop';
+import FakeUpdateScreen from './components/overlays/FakeUpdateScreen';
+import SummaryModal from './components/SummaryModal';
+import { AppState, AppStatus, Settings } from './types';
+import { playSound } from './utils/audio';
 import { Star } from 'lucide-react';
 
 const INITIAL_STATE: AppState = {
