@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, JobType, OsType, MessengerType } from '../types';
+import { Settings, JobType, OsType, MessengerType } from '../types.ts';
 import { Settings as SettingsIcon, History, PlayCircle, Monitor, MessageSquare, Briefcase } from 'lucide-react';
 
 interface SetupCardProps {

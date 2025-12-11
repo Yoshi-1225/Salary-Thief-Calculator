@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Phone, Video, X, Send, Bold, Paperclip, Smile, Search, Bell, MoreHorizontal } from 'lucide-react';
-import { playSound } from '../../utils/audio';
-import { JobType, MessengerType } from '../../types';
+import { playSound } from '../../utils/audio.ts';
+import { JobType, MessengerType } from '../../types.ts';
 
 interface Message {
   text: string;

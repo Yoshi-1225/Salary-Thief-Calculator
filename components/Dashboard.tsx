@@ -1,6 +1,6 @@
 import React from 'react';
-import { AppState, AppStatus } from '../types';
-import { formatMoney, formatTimer } from '../utils/format';
+import { AppState, AppStatus } from '../types.ts';
+import { formatMoney, formatTimer } from '../utils/format.ts';
 import { Briefcase, Bath, Fish, LogOut, Coins } from 'lucide-react';
 
 interface DashboardProps {
