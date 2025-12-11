@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { playSound } from '../../utils/audio';
 import { JobType, MessengerType, ChatMessage } from '../../types';
 import { COLLEAGUE_NAMES, JOB_SCRIPTS } from '../../data/gameData';
-import { TeamsTheme } from './chat/TeamsTheme';
-import { LineTheme } from './chat/LineTheme';
-import { SlackTheme } from './chat/SlackTheme';
+import { TeamsTheme, LineTheme, SlackTheme } from './ChatThemes';
 
 interface ChatWindowProps {
   messenger: MessengerType;

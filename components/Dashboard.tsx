@@ -1,8 +1,7 @@
 import React from 'react';
 import { AppState, AppStatus } from '../types';
 import { formatMoney, formatTimer } from '../utils/format';
-import { Briefcase, Bath, Fish, LogOut } from 'lucide-react';
-import SalaryDisplay from './dashboard/SalaryDisplay';
+import { Briefcase, Bath, Fish, LogOut, Coins } from 'lucide-react';
 
 interface DashboardProps {
   state: AppState;
@@ -24,11 +23,22 @@ const Dashboard: React.FC<DashboardProps> = ({ state, onStatusChange, onStop, cl
 
   return (
     <div className={`flex flex-col gap-6 ${className}`}>
-      {/* Money Display - Extracted to component */}
-      <SalaryDisplay 
-        sessionTotal={state.sessionTotal} 
-        salaryPerSecond={state.salaryPerSecond} 
-      />
+      {/* Money Display */}
+      <div className="bg-white rounded-3xl shadow-2xl p-6 text-center border-4 border-yellow-400 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-2 opacity-10">
+          <Coins className="w-24 h-24" />
+        </div>
+        <p className="text-gray-500 font-bold mb-1 uppercase tracking-wider text-sm">今日累積薪資</p>
+        <div className="flex justify-center items-baseline gap-1 text-green-600">
+          <span className="text-3xl font-bold">NT$</span>
+          <span className="text-6xl md:text-7xl font-black digital-font tracking-tighter">
+            {formatMoney(state.sessionTotal)}
+          </span>
+        </div>
+        <div className="mt-2 text-xs text-gray-400 bg-gray-100 inline-block px-3 py-1 rounded-full">
+          秒薪: NT$ <span>{state.salaryPerSecond.toFixed(4)}</span>
+        </div>
+      </div>
 
       {/* Status Bar */}
       <div className={`px-4 py-2 rounded-lg font-bold text-center flex items-center justify-center gap-2 animate-pulse transition-colors duration-300 ${
