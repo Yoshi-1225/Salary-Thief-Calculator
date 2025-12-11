@@ -17,6 +17,7 @@
         if (errorDisplay && errorMessage) {
             errorDisplay.style.display = 'flex';
             errorMessage.textContent = `Error: ${msg}\nLocation: ${url}:${line}:${col}\n${error ? error.stack : ''}`;
+            // Force hide loader if error occurs
             if (loader) loader.style.display = 'none';
         }
         console.error('Global Error:', error);
@@ -130,9 +131,9 @@
     "react/": "https://esm.sh/react@18.2.0/",
     "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?deps=react@18.2.0",
     "react-dom": "https://esm.sh/react-dom@18.2.0?deps=react@18.2.0",
+    "react-dom/": "https://esm.sh/react-dom@18.2.0/",
     "lucide-react": "https://esm.sh/lucide-react@0.294.0?deps=react@18.2.0",
-    "tone": "https://esm.sh/tone@14.7.77",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.1/"
+    "tone": "https://esm.sh/tone@14.7.77"
   }
 }
 </script>
