@@ -25,7 +25,7 @@
         const errorMessage = document.getElementById('error-message');
         const loader = document.getElementById('loader');
         
-        console.error(message);
+        console.error("Critical Error:", message);
 
         if (errorDisplay && errorMessage) {
             errorDisplay.style.display = 'flex';
@@ -34,24 +34,29 @@
         }
       }
 
-      // Timeout detection: If app doesn't load in 5 seconds, warn the user
+      // Timeout detection: If app doesn't load in 3 seconds, warn the user
       setTimeout(() => {
         const loader = document.getElementById('loader');
         // Check if loader is still in the DOM and visible
         if (loader && document.body.contains(loader) && loader.style.display !== 'none') {
             const warningDiv = document.createElement('div');
+            warningDiv.id = 'loader-warning';
             warningDiv.style.color = '#ef4444'; // red-500
             warningDiv.style.marginTop = '15px';
             warningDiv.style.fontSize = '0.9rem';
             warningDiv.style.fontWeight = 'bold';
-            warningDiv.innerHTML = '⚠️ 系統載入時間過長...<br>若持續卡住，請重新整理或檢查 Console 錯誤';
+            warningDiv.style.padding = '10px';
+            warningDiv.style.background = 'rgba(255,255,255,0.8)';
+            warningDiv.style.borderRadius = '8px';
+            warningDiv.innerHTML = '⚠️ 系統載入時間過長...<br>若持續卡住，請嘗試重新整理 (F5)';
             
+            // Only append if not already there
             const contentContainer = loader.firstElementChild;
-            if (contentContainer) {
+            if (contentContainer && !document.getElementById('loader-warning')) {
                 contentContainer.appendChild(warningDiv);
             }
         }
-      }, 5000);
+      }, 3000);
     </script>
 
     <style>
@@ -108,7 +113,7 @@
             border: 4px solid #fff;
             border-radius: 50%;
             animation: loader-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-            border-color: #fff transparent transparent transparent;
+            border-color: #3b82f6 transparent transparent transparent;
         }
         .loader-ring div:nth-child(1) { animation-delay: -0.45s; }
         .loader-ring div:nth-child(2) { animation-delay: -0.3s; }
@@ -178,9 +183,8 @@
             <pre id="error-message" style="background: #fef2f2; padding: 15px; border-radius: 8px; overflow-x: auto; color: #dc2626; font-size: 0.875rem; border: 1px solid #fecaca; white-space: pre-wrap; word-break: break-all; max-height: 300px; overflow-y: auto;"></pre>
             <p style="margin-top: 20px; font-size: 0.875rem; color: #666; border-top: 1px solid #eee; padding-top: 10px;">
                 <strong>故障排除建議：</strong><br>
-                1. 請確認已執行 <code>npm install</code> 與 <code>npm run dev</code>。<br>
-                2. 若已部署，請檢查 Build Log 是否有錯誤。<br>
-                3. 請使用支援 ESM 的瀏覽器 (Chrome, Edge, Firefox, Safari)。
+                1. 請嘗試清除瀏覽器快取並重新整理。<br>
+                2. 若您是開發者，請檢查 Console 是否有 JavaScript 錯誤。<br>
             </p>
             <button onclick="window.location.reload()" style="margin-top: 15px; padding: 8px 16px; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer;">重新整理</button>
         </div>
