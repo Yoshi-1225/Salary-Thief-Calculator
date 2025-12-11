@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>上班跳錢機 - 薪水小偷計算器</title>
-    <meta name="description" content="即時計算你的薪水，上班摸魚、帶薪大便的最佳夥伴。">
-    <!-- Keep Tailwind CDN for simplicity -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
@@ -101,20 +99,29 @@
 <script type="importmap">
 {
   "imports": {
+    "react/": "https://esm.sh/react@^19.2.1/",
     "react": "https://esm.sh/react@^19.2.1",
     "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
-    "react/": "https://esm.sh/react@^19.2.1/",
-    "tone": "https://esm.sh/tone@^15.1.22",
     "lucide-react": "https://esm.sh/lucide-react@^0.559.0",
-    "vite": "https://esm.sh/vite@^7.2.7",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "tone": "https://esm.sh/tone@^15.1.22"
   }
 }
 </script>
 </head>
 <body>
-    <div id="root"></div>
-    <!-- Vite entry point -->
+    <div id="root">
+        <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
+            <div style="text-align: center; color: #666;">
+                <div class="loader-ring" style="margin-bottom: 20px;">
+                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
+                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
+                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
+                    <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
+                </div>
+                <div style="font-family: 'Noto Sans TC';">系統啟動中...</div>
+            </div>
+        </div>
+    </div>
     <script type="module" src="./index.tsx"></script>
 </body>
 </html>
