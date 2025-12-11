@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>上班跳錢機 - 薪水小偷計算器</title>
-    <!-- Tailwind CSS (Keep CDN for simplicity in this setup, usually handled by PostCSS in prod) -->
+    <!-- Tailwind CSS CDN (Required as it is not in package.json) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
             background-color: #f3f4f6;
             margin: 0;
             padding: 0;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden;
         }
 
         /* Custom Animations */
@@ -115,8 +115,8 @@
 </head>
 <body>
     <div id="root">
-        <!-- Loader stays in HTML until React mounts and replaces it -->
-        <div id="loader" style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f3f4f6; z-index: 9999;">
+        <!-- Initial Loader -->
+        <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f3f4f6;">
             <div class="loader-ring" style="margin-bottom: 20px;">
                 <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
                 <div style="border-color: #3b82f6 transparent transparent transparent;"></div>
@@ -126,7 +126,6 @@
             <div style="font-family: 'Noto Sans TC'; color: #666; font-weight: bold;">
                 薪水計算核心啟動中...
             </div>
-            <!-- Backup warning if JS fails completely -->
             <noscript>
                 <div style="color: red; margin-top: 20px;">
                     請開啟 JavaScript 以使用此應用程式
