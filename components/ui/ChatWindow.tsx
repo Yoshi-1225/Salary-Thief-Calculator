@@ -8,9 +8,10 @@ import { TeamsTheme, LineTheme, SlackTheme } from './ChatThemes';
 interface ChatWindowProps {
   messenger: MessengerType;
   jobTitle: JobType;
+  className?: string;
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ messenger, jobTitle }) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({ messenger, jobTitle, className }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [colleagueName, setColleagueName] = useState("Alex Chen");
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -53,7 +54,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messenger, jobTitle }) => {
     timeString,
     initial,
     firstName,
-    scrollRef
+    scrollRef,
+    className
   };
 
   if (messenger === 'teams') {
