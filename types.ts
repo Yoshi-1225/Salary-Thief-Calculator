@@ -1,4 +1,3 @@
-
 export enum AppStatus {
   IDLE = 'IDLE',
   WORKING = 'WORKING',
@@ -35,9 +34,4 @@ export interface Settings {
   jobTitle: JobType;
   os: OsType;
   messenger: MessengerType;
-}
-
-export interface ChatMessage {
-  text: string;
-  isSelf: boolean;
 }
