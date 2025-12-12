@@ -10,13 +10,14 @@ interface ThemeProps {
   initial: string;
   firstName: string;
   scrollRef: React.RefObject<HTMLDivElement | null>;
+  className?: string;
 }
 
 export const TeamsTheme: React.FC<ThemeProps> = ({ 
-  messages, colleagueName, timeString, initial, firstName, scrollRef 
+  messages, colleagueName, timeString, initial, firstName, scrollRef, className 
 }) => {
   return (
-    <div className="absolute bottom-16 right-4 md:right-10 w-80 bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-300 animate-slide-up font-segoe select-none">
+    <div className={`w-80 bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-300 animate-slide-up font-segoe select-none ${className || ''}`}>
       {/* Teams Header */}
       <div className="bg-[#5b5fc7] text-white p-3 flex justify-between items-center shadow-md">
         <div className="flex items-center gap-3">
@@ -69,10 +70,10 @@ export const TeamsTheme: React.FC<ThemeProps> = ({
 };
 
 export const LineTheme: React.FC<ThemeProps> = ({ 
-  messages, colleagueName, timeString, firstName, scrollRef 
+  messages, colleagueName, timeString, firstName, scrollRef, className 
 }) => {
   return (
-    <div className="absolute bottom-16 right-4 md:right-10 w-80 bg-[#8daeeb] rounded-xl shadow-2xl overflow-hidden border border-gray-400 animate-slide-up font-sans select-none">
+    <div className={`w-80 bg-[#8daeeb] rounded-xl shadow-2xl overflow-hidden border border-gray-400 animate-slide-up font-sans select-none ${className || ''}`}>
       {/* LINE Header */}
       <div className="bg-[#242a38] text-white p-3 flex justify-between items-center opacity-95">
         <div className="flex items-center gap-3">
@@ -127,10 +128,10 @@ export const LineTheme: React.FC<ThemeProps> = ({
 };
 
 export const SlackTheme: React.FC<ThemeProps> = ({ 
-  messages, colleagueName, timeString, initial, scrollRef 
+  messages, colleagueName, timeString, initial, scrollRef, className 
 }) => {
   return (
-    <div className="absolute bottom-16 right-4 md:right-10 w-80 bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-300 animate-slide-up font-sans select-none">
+    <div className={`w-80 bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-300 animate-slide-up font-sans select-none ${className || ''}`}>
        {/* Slack Header */}
        <div className="bg-[#350d36] text-white p-3 flex justify-between items-center">
          <div className="font-bold text-sm tracking-wide"># team-updates</div>
