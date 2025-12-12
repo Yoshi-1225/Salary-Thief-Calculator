@@ -8,7 +8,7 @@ export const COLLEAGUE_NAMES = [
 export const JOB_SCRIPTS: Record<JobType, string[]> = {
   engineer: [
     "哥",
-    "剛剛客戶回報那個問題炸了!!",
+    "剛剛客戶回報那個問題炸了12121212121!!",
     "Log 噴一堆 error 500",
     "主管請你現在過去會議室一下",
     "很急，大家都在等你",
