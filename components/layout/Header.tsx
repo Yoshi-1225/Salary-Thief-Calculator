@@ -14,7 +14,7 @@ const Header: React.FC<HeaderProps> = ({ onTitleClick }) => {
         >
           上班跳錢機 💸
         </h1>
-        <p className="text-xl font-bold opacity-90">每一秒鐘，都是金錢的聲音</p>
+        <p className="text-xl font-bold opacity-80">每一秒鐘，都是金錢的聲音</p>
       </div>
     </header>
   );
